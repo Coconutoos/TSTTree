@@ -2,69 +2,93 @@
 #include <string.h>
 
 void printMenu(){
-  printf("1. Consultar palavra\n");
-  printf("2. Imprimir Dicionario\n");
-  printf("3. Carregar arquivo de StopWords\n");
-  printf("4. Sair\n");
+    printf("\n ---------------------------------\n");
+    printf("|1. Consultar palavra             |\n");
+    printf("|2. Imprimir Dicionario           |\n");
+    printf("|3. Carregar arquivo de StopWords |\n");
+    printf("|4. Sair                          |\n");
+    printf(" ---------------------------------\n");
 }
 
-void getOption(option *aux){
-  scanf("%u%*c", aux);
-  while(*aux < CONSULTAR || *aux > SAIR){
-    printf("Opcao invalida, digite novamente\n");
-    scanf("%u%*c", aux);
-  }
+option getOption(){
+    option aux;
+    scanf("%u%*c", &aux);
+    while(aux < CONSULTAR || aux > SAIR){
+        printf("Opcao invalida, digite novamente\n");
+        scanf("%u%*c", &aux);
+    }
+    return aux;
 }
 
 FILE* openFile(){
-  FILE* aux;
-  char fn[50];
-  printf("Digite o nome do arquivo dicionario: ");
-  scanf("%s%*c", fn);
-  aux = fopen(fn, "r");
-  while(aux == NULL){
-    printf("Arquivo nao encontrado, digite novamente\n");
+    FILE* aux;
+    char fn[50];
+    printf("Digite o nome do arquivo dicionario: ");
     scanf("%s%*c", fn);
     aux = fopen(fn, "r");
-  };
-  return aux;
+    while(aux == NULL){
+        printf("Arquivo nao encontrado, digite novamente\n");
+        scanf("%s%*c", fn);
+        aux = fopen(fn, "r");
+    };
+    return aux;
 }
 
-void lerDicionarioArquivo(No** r){
-  char aux[100], buffer;
-  FILE *f;
-  f = openFile();
-  int n;
-  while(fgets(aux, 100, f)){
-    n = strcspn(aux, "\n");
-    aux[n] = 0;
-    inserePalavra(r, aux);
-  }
-  fclose(f);
+Node* readDictionaryFile(Node* r){
+    char aux[100];
+    FILE *f;
+    f = openFile();
+
+    while(fscanf(f, "%s%*c", aux) != EOF)
+        r = insertWord(r, aux);
+
+    fclose(f);
+    return r;
+}
+
+Node* readStopWordsFile(Node* r){
+    char aux[100];
+    FILE *f;
+    f = openFile();
+
+    while(fscanf(f, "%s%*c", aux) != EOF)
+        r = removeWord(r, aux);
+
+    fclose(f);
+    return r;
 }
 
 void runApp() {
-    No *root;
+    Node* root = NULL;
     char search[50];
     option op;
 
-    lerDicionarioArquivo(&root);
+    root = readDictionaryFile(root);
 
     printf("Dicionario Carregado!\n");
 
-    while(1) {
+    while(1){
         printMenu();
-        getOption(&op);
+        op = getOption();
         switch(op){
             case CONSULTAR:
                 scanf("%s%*c", search);
-                consultarPalavra(root, search, search);
+                printf("\n===================================\n");
+                searchWord(root, search, search);
+                printf("===================================\n");
+                printf("Prefixo pesquisado: %s\n", search);
+                printf("===================================\n\n");
                 break;
+
             case IMPRIMIR:
-                imprimeDicionario(root);
+                printf("===================================\n");
+                printDictionary(root);
+                printf("===================================\n\n");
                 break;
+
             case STOPWORDS:
-                printf("Stop words\n");
+                root = readStopWordsFile(root);
+                printf("\nStopWords executado com sucesso!\n");
                 break;
             case SAIR:
                 return;
