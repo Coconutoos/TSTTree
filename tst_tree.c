@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "tst_tree.h"
 
 Node* newNode(char ch){
@@ -12,23 +13,23 @@ Node* newNode(char ch){
 }
 
 Node* insertWord(Node* r, char* str){
-    if(r == NULL)
-        r = newNode(*str);
+  if(r == NULL)
+		r = newNode(*str);
 
-    if(r->ch == *str){
-        if(*(str+1))
-            r->mid = insertWord(r->mid, str+1);
-        else
-            r->isEnd=1;
-    }
-    else{
-        if(r->ch > *str)
-            r->left = insertWord(r->left, str);
-        else
-            r->right = insertWord(r->right, str);
-    }
+	if(r->ch == *str){
+		if(*(str+1))
+			r->mid = insertWord(r->mid, str+1);
+		else
+			r->isEnd=1;
+	}
+	else{
+		if(r->ch > *str)
+			r->left = insertWord(r->left, str);
+		else
+			r->right = insertWord(r->right, str);
+	}    
 
-    return r;
+	return r;
 }
 
 void printDictionaryAux(Node* r, char* word, int n){
@@ -132,4 +133,37 @@ Node* removeWord(Node* r, char* word){
     }
 
     return r;
+}
+
+void validateDif(char str[], char word[], int dif){
+	int i, d;
+	
+	d = abs(strlen(str) - strlen(word));
+	
+	for(i=0; str[i] && word[i]; i++)
+		if(str[i] != word[i]) d++;
+
+	if(d <= dif)
+		printf("%s\n", word);
+}
+
+void printSimilarsAux(Node* r, char *str, char *word, int dif, int n){
+    if(r == NULL)
+        return;
+
+    printSimilarsAux(r->left, str, word, dif, n);
+
+    word[n] = r->ch;
+    if(r->isEnd){
+        word[n+1] = '\0';
+				validateDif(str, word, dif);
+    }
+
+    printSimilarsAux(r->mid, str, word, dif, n+1);
+    printSimilarsAux(r->right, str, word, dif, n);
+}
+
+void printSimilars(Node* r, char *str, int dif){
+    char word[50];
+    printSimilarsAux(r, str, word, dif, 0);
 }

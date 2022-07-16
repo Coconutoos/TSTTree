@@ -4,7 +4,7 @@
 #include "tst_tree.h"
 #include "stdlib.h"
 
-typedef enum {CONSULTAR = 1, IMPRIMIR, STOPWORDS, SAIR} option;
+typedef enum {CONSULTAR = 1, IMPRIMIR, STOPWORDS, SEMELHANTES, SAIR} option;
 
 //Printa o menu com as opcoes possiveis
 //Pre-condicao: Nenhuma
@@ -30,6 +30,8 @@ Node* readDictionaryFile();
 //Pre-condicao: Um ponteiro para Node, um arquivo valido para entrada
 //Pos-condicao: Um pontiero para Node com as palavras removidas eh retornado
 Node* readStopWordsFile(Node* r);
+
+void similars(Node* r);
 
 // Gerencia a execucao do programa, inicializa o dicionario na arvore e controla o fluxo do menu
 //Pre-condicao: Nenhuma

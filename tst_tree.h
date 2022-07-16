@@ -17,4 +17,6 @@ void searchWord(Node *r, char* str, char* word);
 
 Node* removeWord(Node* r, char* word);
 
+void printSimilars(Node* r, char *str, int dif);
+
 #endif //TSTTREE_H
