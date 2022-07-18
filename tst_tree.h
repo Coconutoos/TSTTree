@@ -36,7 +36,7 @@ Node* removeWord(Node* r, char* word);
 
 // Busca palavras que se encaixam na distancia de edicao fornecida
 //Pre-condicao: Um ponteiro para Node
-//Pos-condicao: Imprime as palavras na arvore que se encaixam
+//Pos-condicao: Imprime as palavras na arvore que se encaixam na busca
 void printSimilars(Node* r, char *str, int dif);
 
 #endif //TSTTREE_H
