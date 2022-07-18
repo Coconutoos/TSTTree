@@ -6,8 +6,8 @@ void printMenu(){
   printf("|1. Consultar palavra             |\n");
   printf("|2. Imprimir Dicionario           |\n");
   printf("|3. Carregar arquivo de StopWords |\n");
-	printf("|4. Semelhantes                   |\n");
-	printf("|5. Sair                          |\n");
+  printf("|4. Semelhantes                   |\n");
+  printf("|5. Sair                          |\n");
   printf(" ---------------------------------\n");
 }
 
@@ -82,8 +82,7 @@ void similars(Node* r){
 	scanf("%d", &n);
 	printf("\n===================================\n");
 	printSimilars(r, aux, n);
-	printf("===================================\n");
-	return r;
+    printf("\n===================================\n");
 }
 
 void runApp() {
@@ -106,13 +105,13 @@ void runApp() {
         searchWord(root, search, search);
         printf("===================================\n");
         printf("Prefixo pesquisado: %s\n", search);
-        printf("===================================\n\n");
+        printf("===================================\n");
         break;
           
       case IMPRIMIR:
         printf("\n===================================\n");
         printDictionary(root);
-        printf("===================================\n\n");
+        printf("===================================\n");
         break;
           
 			case STOPWORDS:
@@ -123,9 +122,10 @@ void runApp() {
 			case SEMELHANTES:
         similars(root);
         break;
-					
-			case SAIR:
-				return;
+        case SAIR:
+            return;
+        default:
+            return;
       };
   }
 }

@@ -1,6 +1,7 @@
 #ifndef APP_H
 #define APP_H
 #include <stdio.h>
+#include <ctype.h>
 #include "tst_tree.h"
 #include "stdlib.h"
 
