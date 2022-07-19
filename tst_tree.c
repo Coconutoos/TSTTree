@@ -27,7 +27,7 @@ Node* insertWord(Node* r, char* str){
 			r->left = insertWord(r->left, str);
 		else
 			r->right = insertWord(r->right, str);
-	}    
+	}
 
 	return r;
 }
@@ -53,27 +53,40 @@ void printDictionary(Node* r){
     printDictionaryAux(r, word, 0);
 }
 
-void printWordAux(Node* r, char* beginning, char* end, int n, int* limit){
-    if(r == NULL || *limit <= 0)
+void printVet(char words[][50], int j){
+    int i;
+    for(i=0; i<j-1; i++)
+        printf("%s, ", words[i]);
+    printf("%s\n", words[i]);
+}
+
+void printWordAux(Node* r, char words[][50], char* end, int n, int t, int* i){
+    if(r == NULL || *i >=10)
         return;
 
-    printWordAux(r->left, beginning, end, n, limit);
+    printWordAux(r->left, words, end, n, t, i);
 
     end[n] = r->ch;
     if(r->isEnd){
-        (*limit)--;
         end[n+1] = '\0';
-        printf("%s%s\n", beginning, end);
+        strcpy(words[*i]+t, end);
+        (*i)++;
     }
 
-    printWordAux(r->mid, beginning, end, n+1, limit);
-    printWordAux(r->right, beginning, end, n, limit);
+    printWordAux(r->mid, words, end, n+1, t, i);
+    printWordAux(r->right, words, end, n, t, i);
 }
 
-void printWord(Node* r, char* beginning, int f){
+void printWord(Node* r, char words[][50], int t, int i){
     char end[50];
-    int limit = 10-f;
-    printWordAux(r, beginning, end, 0, &limit);
+    printWordAux(r, words, end, 0, t, &i);
+    printVet(words, i);
+}
+
+void addToVet(char words[][50], char str[]){
+    int i;
+    for(i=0; i<10; i++)
+        strcpy(words[i], str);
 }
 
 void searchWord(Node *r, char* str, char* word){
@@ -86,8 +99,9 @@ void searchWord(Node *r, char* str, char* word){
             searchWord(r->right, str, word);
         else{
             if(*(str+1) == '\0'){
-                if(r->isEnd) printf("%s\n", word);
-                printWord(r->mid, word, r->isEnd);
+                char words[10][50];
+                addToVet(words, word);
+                printWord(r->mid, words, strlen(word),r->isEnd);
                 return;
             }
             searchWord(r->mid, str+1, word);
@@ -137,9 +151,9 @@ Node* removeWord(Node* r, char* word){
 
 void validateDif(char str[], char word[], int dif){
 	int i, d;
-	
+
 	d = abs(strlen(str) - strlen(word));
-	
+
 	for(i=0; str[i] && word[i]; i++)
 		if(str[i] != word[i]) d++;
 

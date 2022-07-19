@@ -4,9 +4,9 @@
 void printMenu(){
   printf("\n ---------------------------------\n");
   printf("|1. Consultar palavra             |\n");
-  printf("|2. Imprimir Dicionario           |\n");
+  printf("|2. Imprimir dicionario           |\n");
   printf("|3. Carregar arquivo de StopWords |\n");
-  printf("|4. Semelhantes                   |\n");
+  printf("|4. Consultar semelhantes         |\n");
   printf("|5. Sair                          |\n");
   printf(" ---------------------------------\n");
 }
@@ -42,7 +42,7 @@ int validateWord(char word[]){
 			return 0;
 		word[i] = tolower(word[i]);
 	}
-	
+
 	return 1;
 }
 
@@ -50,12 +50,12 @@ Node* readDictionaryFile(Node* r){
 	char aux[100];
   FILE *f;
   f = openFile();
-	
+
   while(fscanf(f, "%s%*c", aux) != EOF){
 		if(validateWord(aux))
 			r = insertWord(r, aux);
 	}
-	
+
   fclose(f);
 	return r;
 }
@@ -64,10 +64,10 @@ Node* readStopWordsFile(Node* r){
 	char aux[100];
   FILE *f;
   f = openFile();
-	
+
   while(fscanf(f, "%s%*c", aux) != EOF)
 		r = removeWord(r, aux);
-	
+
   fclose(f);
 	return r;
 }
@@ -89,7 +89,7 @@ void runApp() {
   Node* root = NULL;
   char search[50];
   option op;
-	
+
   root = readDictionaryFile(root);
 
   printf("Dicionario Carregado!\n");
@@ -104,21 +104,19 @@ void runApp() {
         printf("\n===================================\n");
         searchWord(root, search, search);
         printf("===================================\n");
-        printf("Prefixo pesquisado: %s\n", search);
-        printf("===================================\n");
         break;
-          
+
       case IMPRIMIR:
         printf("\n===================================\n");
         printDictionary(root);
         printf("===================================\n");
         break;
-          
+
 			case STOPWORDS:
         root = readStopWordsFile(root);
         printf("\nStopWords executado com sucesso!\n");
         break;
-					
+
 			case SEMELHANTES:
         similars(root);
         break;
